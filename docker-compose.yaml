@@ -1,0 +1,36 @@
+---
+
+version: '3.8'
+
+services:
+  #
+  # PostgreSQL
+  #
+  pg:
+    image: postgres:14-bullseye
+    container_name: dummy-pg
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: dummy-user
+      POSTGRES_PASSWORD: dummy-pass
+      POSTGRES_DB: dummy-db
+      POSTGRES_INIT_DB_ARGS: --encoding=UTF-8
+    volumes:
+      - type: bind
+        source: ${PWD}/sql/
+        target: /docker-entrypoint-initdb.d/
+  #
+  # pgweb
+  # PostgreSQLのGUIクライアント(ブラウザで見える)
+  #
+  pg-web:
+    image: sosedoff/pgweb
+    container_name: pg-web
+    ports:
+      - 8081:8081
+    environment:
+      DATABASE_URL: postgres://dummy-user:dummy-pass@pg:5432/dummy-db?sslmode=disable
+    depends_on:
+      - pg
+    restart: always # dummy-pgのコンテナではなくてDB起動するまでrestartしている

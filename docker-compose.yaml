@@ -34,3 +34,35 @@ services:
     depends_on:
       - pg
     restart: always # dummy-pgのコンテナではなくてDB起動するまでrestartしている
+  #
+  # mysql
+  #
+  mysql:
+    image: mysql:8.0-debian
+    platform: linux/amd64 # mac m1用
+    container_name: dummy-mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root-pass
+      MYSQL_USER: dummy-user
+      MYSQL_PASSWORD: dummy-pass
+      MYSQL_DATABASE: dummy-db
+      LANG: C.UTF-8
+      TZ: Asia/Tokyo
+    #volumes:
+    #  - type: bind
+    #    source: ${PWD}/sql/
+    #    target: /docker-entrypoint-initdb.d/
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+  #
+  # adminer
+  # DBのGUIクライアント(ブラウザで見える)
+  # MySQL以外にもできる
+  #
+  adminer:
+    image: adminer:4.8.1
+    container_name: adminer
+    restart: always
+    ports:
+      - 8080:8080

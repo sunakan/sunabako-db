@@ -6,6 +6,10 @@ pg.up: ## postgres起動
 pg.dump: ## 現在のpostgresの状態をdump
 	docker-compose exec pg bash -c 'pg_dump dummy-db --inserts -a -Udummy-user > /docker-entrypoint-initdb.d/9001-pg-dump.sql'
 
+.PHONY: mysql.up
+mysql.up: ## mysql起動
+	docker-compose up mysql adminer
+
 .PHONY: down
 down: ## docker-compose down
 	docker-compose down

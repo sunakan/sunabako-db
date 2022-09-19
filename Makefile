@@ -1,3 +1,7 @@
+.PHONY: up
+up: ## db全て起動
+	docker-compose up
+
 .PHONY: pg.up
 pg.up: ## postgres起動
 	docker-compose up pg pg-web

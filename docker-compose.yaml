@@ -50,10 +50,10 @@ services:
       MYSQL_DATABASE: dummy-db
       LANG: C.UTF-8
       TZ: Asia/Tokyo
-    #volumes:
-    #  - type: bind
-    #    source: ${PWD}/sql/
-    #    target: /docker-entrypoint-initdb.d/
+    volumes:
+      - type: bind
+        source: ${PWD}/sql/
+        target: /docker-entrypoint-initdb.d/
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
   #
   # adminer

@@ -3,9 +3,11 @@
 set -e
 
 if [ -v PG_VERSION ]; then
-  ls -1 /docker-entrypoint-initdb.d/*/init.postgres.sql | xargs -I{} psql -U "${POSTGRES_USER}" -d "${POSTGRES_DB}" -f {}
+  echo 'PostgreSQLの初期化を行います'
+  find /docker-entrypoint-initdb.d/ -name '*.postgres.sql' | xargs -I{} psql -U "${POSTGRES_USER}" -d "${POSTGRES_DB}" -f {}
 elif [ -v MYSQL_VERSION ]; then
-  ls -1 /docker-entrypoint-initdb.d/*/init.mysql.sql | xargs -I{} mysql -u "${MYSQL_USER}" -D "${MYSQL_DATABASE}" -p "${MYSQL_PASSWORD}" -f {}
+  echo 'MySQLの初期化を行います'
+  find /docker-entrypoint-initdb.d/sakila-db/ -name '*.mysql.sql' | xargs -I{} bash -c 'mysql -uroot -p"${MYSQL_ROOT_PASSWORD}" < {}'
 else
   echo 'どれでもありません'
 fi
